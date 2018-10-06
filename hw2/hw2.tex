@@ -1,0 +1,346 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\begin{document}
+
+\begin{enumerate}
+	\item Consider a Boltzman machine model parameterized as
+	\begin{equation}
+		Pr(x_1,\cdots,x_n) = \frac{1}{Z}\exp(\sum_{(i,j\in E)}w_{i,j}x_ix_j - \sum_{i\in V}u_i, x_i)
+	\end{equation}
+	and an Ising model parameterized as 
+	\begin{equation}
+	Pr(y_1,\cdots,y_n) = \frac{1}{C}\exp(\sum_{(i,j\in E)}a_{i,j}y_iy_j - \sum_{i\in V}b_i, y)_i
+	\end{equation}
+	We will construct $w, u, Z$ such that
+	$Pr(x_1,\cdots,x_n) = Pr(y_1,\cdots,y_n)$
+	for $y_i = 2x_i - 1$.
+
+	Consider
+	\begin{equation}
+		\begin{aligned}
+			 g(x_1,\cdots,x_n) & = & \frac{1}{C} \exp(\sum_{(i,j)\in E}a_{i,j}y_iy_j - \sum_{i\in V}b_iy_i) \\
+			 & = & \frac{1}{C}\exp(\sum_{(i, j)\in E}a_{i,j}(2x_i - 1)(2x_j - 1) - \sum_{i \in V}b_i(2x_i - 1)) \\
+			 & = &\frac{1}{C}\exp(\sum_{(i, j)\in E}a_{i,j}(4x_ix_j - 2x_i - 2x_j + 1) - \sum_{i \in V}b_i(2x_i - 1))
+		\end{aligned}
+	\end{equation}
+
+	Note that 
+	\begin{equation}
+		\begin{aligned}
+		\sum_{(i, j)\in E}a_{i,j}(4x_ix_j - 2x_i - 2x_j + 1) = \\ 
+		4\sum_{(i, j)\in E}a_{i,j}x_ix_j - 2\sum_{(i, j)\in E}a_{i,j}x_i - 2\sum_{(i, j)\in E}a_{i,j}x_j + \sum_{(i, j)\in E}a_{i,j}
+		\end{aligned}
+	\end{equation}
+
+	Since we only consider each edge in one direction when doing our summations, we can write 
+	\begin{equation}
+		\begin{aligned}
+		\sum_{(i, j)\in E}a_{i,j}x_i + \sum_{(i, j)\in E}a_{i,j}x_j  & = & \sum_{i \in V}\sum_{j \in N_G(i)} a_{i, j} x_i \\
+		&  = & \sum_{i \in V} x_i \sum_{j \in N_G(i)} a_{i, j} \\ 
+		& = & \sum_{i \in V} \alpha_i x_i
+		\end{aligned}
+	\end{equation}
+	 for 
+	\begin{equation}
+		\alpha_i = \sum_{j \in N_G(i)} a_{i, j} 
+	\end{equation} 
+
+	Then
+	\begin{equation}
+		\begin{aligned}
+		\sum_{(i, j)\in E}a_{i,j}(4x_ix_j - 2x_i - 2x_j + 1) - \sum_{i \in V}b_i(2x_i - 1) \\
+		= 4\sum_{(i, j)\in E}a_{i,j}x_ix_j - 2\sum_{i\in V}\alpha_i x_i - 2\sum_{i \in V}b_ix_i + \sum_{(i, j)\in E}a_{i,j} + \sum_{i \in V}b_i  \\
+		= \sum_{(i,j\in E)}w_{i,j}x_ix_j - \sum_{i\in V}u_ix_i + D
+		\end{aligned}
+	\end{equation}
+		for $D =  \sum_{(i, j)\in E}a_{i,j} + \sum_{i \in V}b_i$, $w_{i,j}=4a_{i,j}$ and $u_i = \alpha_i + b_i$.
+
+	So 
+	\begin{equation}\begin{aligned}
+		g(x_1,\cdots,x_n) & = & \frac{1}{C}\exp(\sum_{(i,j\in E)}w_{i,j}x_ix_j - \sum_{i\in V}u_ix_i + D) \\
+		& = & \frac{1}{C\exp(D)}\exp(\sum_{(i,j\in E)}w_{i,j}x_ix_j - \sum_{i\in V}u_ix_i) \\
+		& = & \frac{1}{Z}\exp(\sum_{(i,j\in E)}w_{i,j}x_ix_j - \sum_{i\in V}u_ix_i) \\
+		& = & Pr(x_1,\cdots,x_n)
+	\end{aligned}\end{equation}
+	for $Z = C\exp(D)$.
+
+	\item 
+		\begin{enumerate}
+			\item
+			\begin{enumerate}
+				\item Note that 
+					\begin{equation}
+						\begin{aligned} 
+							P_N(x; \mu, I) & = & \frac{1}{\sqrt{2\pi}}\exp(-\frac{1}{2}(x -\mu)^T(x-\mu)) \\
+							& = & \frac{1}{\sqrt{2\pi}}\exp(-\frac{1}{2}\sum_i x_i^2 -2\mu_ix_i + \mu_i^2) \\ 
+							& = & \frac{1}{\sqrt{2\pi}}\exp(-\frac{1}{2} x^Tx)\exp(\mu^T x - \ln(\exp(\frac{1}{2}\mu^T\mu))) \\
+							& = & h(x)\exp(\eta f(x) - \ln Z(\eta))
+						\end{aligned}
+					\end{equation}
+					for $h(x) = \frac{1}{\sqrt{2\pi}}\exp(-\frac{1}{2} x^Tx)$, $\eta = \mu$, $f(x) = x$ and $Z(\eta) = \exp(\frac{1}{2}\mu^T\mu)$.
+				\item 
+					\begin{equation}
+						\begin{aligned}
+							Pr(x) & = & \frac{1}{B(\alpha)}\prod_{i} x_i^{\alpha_i - 1} \\
+							& = & \exp((\alpha - 1)^T\ln(x) - \ln B(\alpha)) \\
+							& = &  h(x)\exp(\eta f(x) - \ln Z(\eta)
+						\end{aligned}
+					\end{equation}
+					for $h(x) = 1$, $\eta = \alpha - 1$, $f(x) = \ln(x)$ and $Z(\eta) = B(\eta + 1)$.
+				\item 
+					\begin{equation}
+						\begin{aligned}
+							Pr(x) & = & \frac{1}{x\sigma \sqrt{2\pi}} \exp(\frac{\ln(x)^2}{2\sigma^2}) \\
+							& = & \frac{1}{x \sqrt{2\pi}}\exp(\frac{1}{2\sigma^2}\ln(x)^2 - \ln(\sigma)) \\
+							& = &  h(x)\exp(\eta f(x) - \ln Z(\eta)
+						\end{aligned}
+					\end{equation}
+					for $H(x) = \frac{1}{x \sqrt{2\pi}}$, $\eta = \frac{1}{2\sigma^2}$, $f(x) = \ln(x)^2$ and $V(\eta) = 2\eta^{-\frac{1}{2}} = \sigma$.
+				\item Let $\eta = (u, w)$ and $f(x) = (f_v(x), f_e(x))$ where $f_{v_i}(x) = x_i$ and $f_{e_{i,j}} = x_ix_j$. Note that
+					\begin{equation}
+						\begin{aligned}
+							Pr(x) & \propto & \exp(\sum_i u_ix_i + \sum_{(i, j)\in E}w_{i,j}x_ix_j) \\
+							& = & \exp(\eta^T f(x))
+						\end{aligned}
+					\end{equation}
+					So $Pr(x) = h(x)\exp(\eta^T f(x) - \ln(Z(\eta)))$ for $h(x) = 1$ and
+					\begin{equation}
+						Z(\eta) = \sum_{x\in\{0, 1\}^n}\exp(\eta^T f(x))
+					\end{equation}
+			\end{enumerate}
+			\item
+			Let 
+			\begin{equation}
+				g_i(x) = 
+					\begin{cases}
+						1 & \mbox{if } i = 0 \\
+						x_i & \mbox{otherwise}
+					\end{cases}
+			\end{equation}
+			\begin{equation}
+				f_i(x, y) = g_i(x)(1 - y)
+			\end{equation}
+			\begin{equation}
+			\eta = -\alpha
+			\end{equation}
+			Then 
+			\begin{equation}
+				\begin{aligned}
+					Pr(Y = y| x; \alpha) & = & 
+						\frac
+						{
+							\exp((1-y)(-\alpha_0-\sum_{i = 1}^n\alpha_i x_i))
+						}
+						{
+							1 + \exp(-\alpha_0-\sum_{i = 1}^n\alpha_i x_i)
+						} \\
+					& = & \frac{\exp(\eta^Tf(x, y))}{1 + \eta^Tg(x)} \\
+					& = & \exp(\eta^Tf(x, y) - \ln(1 + \eta^Tg(x)) \\
+					& = & h(x, y)\exp(\eta^T f(x, y) - \ln(Z(\eta, x)))
+				\end{aligned}
+			\end{equation}
+			for $h(x, y) = 1$ and $Z(\eta, x) = 1 + \eta^Tg(x)$.
+		\end{enumerate}
+	\item Choose $r \in V$ and let $T'$ be the edges of $T$ directed away from $r$. Now choose $A, B, C \subseteq V$. Suppose that $A \perp B | C$ in the Markov Random Field defined by $T$. Then every path from a node in $A$ to a node in $C$ contains a node in $B$. 
+	
+	All edges in $T'$ are directed away from $r$. Thus, there are no v-structures in $T'$. Hence, we can apply the Bayes Ball algorithm to show that $B$ $d$-separates $A$ and $C$ in $T'$.
+	So $A \perp B | C$ in the Bayesian Network defined by $T'$. The Bayesian Network defined by $T'$ has the same conditional independence structure as the MRF defined over $T$. Thus, any probability distribution $p$ which factorizes over the BN $T'$ also factorizes over the MRF $T$.
+
+	Let $p$ be such a probability distribution. Then
+	\begin{equation}
+		\begin{aligned}
+		p(x) & = & p(x_{r})\prod_{i\to j \in T'} p(x_j | x_i) \\ 
+		& = & p(x_r)\prod_{i\to j \in T'} \frac{p(x_i, x_j)}{p(x_i)} \\
+		& = & p(x_r)\prod_{i\to j \in T'} \frac{p(x_i, x_j)p(x_j)}{p(x_i)p(x_j)}
+		\end{aligned}
+	\end{equation}
+	By construction, if $k \in V$ and $k \not=r$ then there exists a unique edge $u\to w \in T'$ such that $w = k$. Then
+	\begin{equation}
+		p(x_r)\prod_{i\to j \in T'} p(x_j) = p(x_r) \prod_{i \in V\setminus \{r\}} p(x_i) = \prod_{i \in V} p(x_j)
+	\end{equation}
+	and
+	\begin{equation}
+		\begin{aligned}
+		p(x) & = & \prod_{i\to j \in T'} \frac{p(x_i, x_j)}{p(x_i)p(x_j)} \prod_{j \in V} p(x_j) \\
+		& = & \prod_{(i, j) \in T} \frac{p(x_i, x_j)}{p(x_i)p(x_j)} \prod_{j \in V} p(x_j)
+		\end{aligned}
+	\end{equation}
+	 due to the one-to-one correspondence between edges in $T$ and directed edges in $T'$.
+
+	\item 
+	\begin{enumerate}
+		\item
+		Choose $i, j$ and suppose that $(i, j) \not\in E$. 
+		Consider $p(x_i, x_j | x_k : k \not= i,j)$.
+		Since $X_i, X_j$ obey the conditional independence properties of $G$ and $(i, j) \not\in E$ we know that $X_i \perp X_j | \{X_k | k \not= i,j\}$. Thus, by definition,
+		\begin{equation}
+			p(x_i, x_j |x_k : k \not= i,j) = p(x_i|x_k : k \not= i,j)p(x_j|x_k : k \not= i,j)
+		\end{equation}
+		Recall that 
+		\begin{equation}
+		p(x_i, x_j |x_k : k \not= i,j) = \frac{p(x_1,\cdots,x_n)}{p(x_k: k \not= i,j)}
+		\end{equation}
+
+		It follows directly from Murphy Chapter 4.3 that
+		\begin{equation}
+			p(x_1,\cdots, x_n) \propto \exp(\sum_{i,j}\Theta_{ij}x_ix_j)
+		\end{equation}
+		
+		and that the marginal
+		\begin{equation}
+			p(X_k = x_k: k \not= i,j) \propto \exp(\sum_{i,j \not = k}\Theta_{ij}x_ix_j)
+		\end{equation}
+
+		Thus, 
+		\begin{equation}
+		\begin{aligned}
+		p(x_i, x_j |x_k : k \not= i,j) & = & \frac{p(x_1,\cdots,x_n)}{p(x_k: k \not= i,j)} \\
+		& \propto & \frac{\exp(\sum_{i,j}\Theta_{ij}x_ix_j)}{\exp(\sum_{i,j \not = k}\Theta_{ij}x_ix_j)}  \\
+		& = & \exp(\Theta_{ii}x_i^2 + \Theta_{jj}x_j^2 + \Theta_{ij}x_ix_j + \sum_{k\not=i,j}\Theta_{ik}x_ix_k + \sum_{k\not=i,j}\Theta_{jk}x_jx_k)
+		\end{aligned}
+		\end{equation}
+		Which marginalizing over $X_j$ and $X_i$ respectively gives us
+		\begin{equation}
+		p(x_i |x_k : k \not= i,j) \propto \exp(\Theta_{ii}x_i^2 + \sum_{k\not=i,j}\Theta_{ik}x_ix_k)
+		\end{equation}
+		and 
+		\begin{equation}
+		p(x_j |x_k : k \not= i,j) \propto \exp(\Theta_{jj}x_j^2 + \sum_{k\not=i,j}\Theta_{jk}x_jx_k)
+		\end{equation}
+		Then,
+		since
+		\begin{equation}
+			p(x_i, x_j |x_k : k \not= i,j) = p(x_i|x_k : k \not= i,j)p(x_j|x_k : k \not= i,j)
+		\end{equation}
+		we know that
+		\begin{equation}
+		\begin{split}
+		\exp(\Theta_{ii}x_i^2 + \Theta_{jj}x_j^2 + \Theta_{ij}x_ix_j + \sum_{k\not=i,j}\Theta_{ik}x_ix_k + \sum_{k\not=i,j}\Theta_{jk}x_jx_k)\propto \\ 
+		\exp(\Theta_{ii}x_i^2 + \sum_{k\not=i,j}\Theta_{ik}x_ix_k)\exp(\Theta_{jj}x_j^2 + \sum_{k\not=i,j}\Theta_{jk}x_jx_k) = \\
+		\exp(\Theta_{ii}x_i^2 + \Theta_{jj}x_j^2 + \sum_{k\not=i,j}\Theta_{ik}x_ix_k + \sum_{k\not=i,j}\Theta_{jk}x_jx_k)
+		\end{split}
+		\end{equation}
+		Then
+		\begin{equation}
+		\exp(\Theta_{ij}x_ix_j) \propto 1
+		\end{equation}
+		which implies that 
+		\begin{equation}
+		\Theta_{ij}x_ix_j \propto 0
+		\end{equation}
+		which holds only if $\Theta_{ij} = 0$. 
+
+		Now suppose that $\Theta_{ij} = 0$. Then
+		\begin{equation}
+		\begin{aligned}
+			p(x_i, x_j |x_k : k \not= i,j) & \propto & \exp(\Theta_{ii}x_i^2 + \Theta_{jj}x_j^2+ \sum_{k\not=i,j}\Theta_{ik}x_ix_k + \sum_{k\not=i,j}\Theta_{jk}x_jx_k) \\
+			& \propto & \exp(\Theta_{ii}x_i^2 + \sum_{k\not=i,j}\Theta_{ik}x_ix_k\Theta_{jj}x_j^2 + \sum_{k\not=i,j}\Theta_{jk}x_jx_k) \\
+			& \propto & \exp(\Theta_{ii}x_i^2 + \sum_{k\not=i,j}\Theta_{ik}x_ix_k)\exp(\Theta_{jj}x_j^2 + \sum_{k\not=i,j}\Theta_{jk}x_jx_k) \\
+			& \propto & p(x_i |x_k : k \not= i,j)p(x_j |x_k : k \not= i,j) 
+		\end{aligned}
+		\end{equation}
+		Thus,
+		\begin{equation}
+			p(x_i, x_j |x_k : k \not= i,j) =  p(x_i |x_k : k \not= i,j)p(x_j |x_k : k \not= i,j)
+		\end{equation}	
+		 and so $X_i$ and $X_j$ are conditionally independent. Therefore $(i, j) \not\in E$.
+
+		\item From the result above we can conclude that $\Theta_{ij} = 0$ if and only if there is a cut set that separates $i$ and $j$. Equivalently, $\Theta_{ij} = 0$ if and only if $X_i$ and $X_j$ are conditionally independent. 
+
+	\end{enumerate}
+
+
+	\item To show that $r$ is a valid probability distribution we need to show that
+	\begin{equation}
+		\sum_{x_1,\cdots,x_n} r(x_1,\cdots,x_n) = 1
+	\end{equation}
+
+	Let $m_i = 1 - |N_G(i)|$. Then
+	\begin{equation}
+		\begin{aligned}
+		r(x_1,\cdots,x_n) & = & \prod_{i = 1}^n [\mu_i(x_i)]^{m_i} \prod_{(i, j) \in E} \mu_{ij}(x_i, j) \\
+		& = & \prod_{i = 1}^n \mu_i(x_i) \prod_{(i, j) \in E} \frac{\mu_{ij}(x_i, x_j)}{\mu_i(x_i)\mu_j(x_j)}
+		\end{aligned}
+	\end{equation}
+
+	Choose $k \leq n$. 
+	Define $G_k = (V_k, E_k)$ with $V_k = \{v \in V | v \leq k\}$ and $E_k = \{(i, j) \in E | i,j \leq k$ for any $k \leq n$. Without loss of generality, we can label $G$ such that (i) $k$ is a leaf node of $G_k$ for all $2 \leq k \leq n$ and (ii) $G_k$ is connected. For all such $G$, consider
+	\begin{equation}
+		r_k(x_1,\cdots,x_k) = \prod_{i = 1}^k \mu_i(x_i) \prod_{(i, j) \in E_k} \frac{\mu_{ij}(x_i, x_j)}{\mu_i(x_i)\mu_j(x_j)}
+	\end{equation} 
+	for all $k \leq n$. We will show by induction that 
+	\begin{equation}
+		\sum_{x_1,\cdots,x_k} r(x_1,\cdots,x_k) = 1
+	\end{equation}
+	for all $2 \leq k \leq n$ demonstrating that
+	\begin{equation}
+		\sum_{x_1,\cdots,x_n} r(x_1,\cdots,x_n) = 1
+	\end{equation}
+	First consider the base case $k = 2$. Since $G_2$ is connected, $(1, 2) \in E_2$. So
+	\begin{equation}
+		r(x_1, x_2) = \mu_{12}(x_1, x_2)
+	\end{equation}
+	Hence
+	\begin{equation}
+		\begin{aligned}
+		\sum_{x_1,x_2} r(x_1, x_2) &= & \sum_{x_1,x_2} \mu_1(x_1, x_2) \\
+		& = & \sum_{x_1} \sum_{x_2} \mu_1(x_1, x_2) \\
+		& = & \sum_{x_1} \mu_1(x_1) \\
+		& = & 1
+		\end{aligned}
+	\end{equation}
+	thus proving the base case.
+
+	Now choose $2 < k \leq n$. Suppose that $\sum_{x_1,\cdots,x_k} r(x_1,\cdots,x_k) = 1$. To prove the induction step, we will show that
+	\begin{equation}
+		\sum_{x_1,\cdots,x_{k + 1}} r(x_1,\cdots,x_{k + 1}) = 1
+	\end{equation}
+
+	Consider 
+	\begin{equation}
+		r_{k + 1}(x_1,\cdots,x_{k + 1}) = \prod_{i = 1}^{k + 1} \mu_i(x_i) \prod_{(i, j) \in E_{k + 1}} \frac{\mu_{ij}(x_i, x_j)}{\mu_i(x_i)\mu_j(x_j)}
+	\end{equation}
+	Note that 
+	\begin{equation}
+		 \prod_{i = 1}^{k + 1} \mu_i(x_i) =  \mu_{k+1}(x_{k +1})\prod_{i = 1}^{k} \mu_i(x_i)
+	\end{equation}
+	and 
+	\begin{equation}
+		\prod_{(i, j) \in E_{k + 1}} \frac{\mu_{ij}(x_i, x_j)}{\mu_i(x_i)\mu_j(x_j)} = \prod_{(i, j) \in E_{k}} \frac{\mu_{ij}(x_i, x_j)}{\mu_i(x_i)\mu_j(x_j)}\prod_{i \in N_{G_{k + 1}}(k+1)}\frac{\mu_{(k+1)i}(x_{k+1}, x_i)}{\mu_{k+1}(x_{k + 1})\mu_i(x_i)} 
+	\end{equation}
+	Since $k + 1$ is a leaf node in $G_{k+1}$, $N_{G_{k + 1}}(k + 1) = \{v\}$ for some $1 \leq v \leq k $. Thus,
+	\begin{equation}
+	\prod_{i \in N_{G_{k + 1}}(k+1)}\frac{\mu_{(k+1)i}(x_{k+1}, x_i)}{\mu_{k+1}(x_{k + 1})\mu_i(x_i)} = \frac{\mu_{(k+1)v}(x_{k+1}, x_v)}{\mu_{k+1}(x_{k + 1})\mu_v(x_v)}
+	\end{equation}
+
+	So 
+	\begin{equation}
+		\begin{aligned}
+		r_{k + 1}(x_1,\cdots,x_{k + 1}) & = & r_{k}(x_1,\cdots,x_{k})\mu_{k+1}(x_{k +1})\frac{\mu_{(k+1)v}(x_{k+1}, x_v)}{\mu_{k+1}(x_{k + 1})\mu_v(x_v)} \\
+		& = & r_{k}(x_1,\cdots,x_{k})\frac{\mu_{(k+1)v}(x_{k+1}, x_v)}{\mu_v(x_v)}
+		\end{aligned}
+	\end{equation}
+	Thus, 
+	\begin{equation}
+	\begin{aligned}
+		\sum_{x_1,\cdots,x_{k+1}}r_{k + 1}(x_1,\cdots,x_{k + 1}) & = & \sum_{x_1,\cdots,x_{k+1}} r_{k}(x_1,\cdots,x_{k})\frac{\mu_{(k+1)v}(x_{k+1}, x_v)}{\mu_v(x_v)} \\
+		& = &\sum_{x_1,\cdots,x_{k}} r_{k}(x_1,\cdots,x_{k})\sum_{x_{k+1}}\frac{\mu_{(k+1)v}(x_{k+1}, x_v)}{\mu_v(x_v)} \\
+		& = &\sum_{x_1,\cdots,x_{k}} r_{k}(x_1,\cdots,x_{k}) \\
+		& = & 1
+	\end{aligned}
+	\end{equation}
+
+	Thus, by induction, 
+	\begin{equation}
+		\sum_{x_1,\cdots,x_k} r(x_1,\cdots,x_k) = 1
+	\end{equation}
+	for all $2 \leq k \leq n$.
+	So 
+	\begin{equation}
+		\sum_{x_1,\cdots,x_n} r(x_1,\cdots,x_n) = 1
+	\end{equation}
+	and therefore $r$ is a valid probability distribution for $m_i = |N_G(i)| - 1$.
+\end{enumerate}
+\end{document}
